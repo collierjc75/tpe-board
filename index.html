@@ -1,0 +1,309 @@
+<title>TPE — Tennis Predictive Engine · Preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --court:#0a130e; --surface:#111f17; --surface2:#16281d;
+  --chalk:#ecefe3; --muted:#8fa294; --line:#8fe6ac; --rule:#24382c;
+  --black:#dfe3e8; --brown:#c89b76; --gold:#e0c05a; --green:#6fcf97; --blue:#7fb3e8; --purple:#b79be0;
+}
+@media (prefers-color-scheme: light) { :root {
+  --court:#f2f3ea; --surface:#ffffff; --surface2:#e9ede0;
+  --chalk:#15231a; --muted:#5c6f61; --line:#1d7a45; --rule:#d5dccb;
+  --black:#20242a; --brown:#8a5f38; --gold:#9c7f16; --green:#1f7a4a; --blue:#2262a8; --purple:#6b3fa0;
+} }
+:root[data-theme="light"] {
+  --court:#f2f3ea; --surface:#ffffff; --surface2:#e9ede0;
+  --chalk:#15231a; --muted:#5c6f61; --line:#1d7a45; --rule:#d5dccb;
+  --black:#20242a; --brown:#8a5f38; --gold:#9c7f16; --green:#1f7a4a; --blue:#2262a8; --purple:#6b3fa0;
+}
+:root[data-theme="dark"] {
+  --court:#0a130e; --surface:#111f17; --surface2:#16281d;
+  --chalk:#ecefe3; --muted:#8fa294; --line:#8fe6ac; --rule:#24382c;
+  --black:#dfe3e8; --brown:#c89b76; --gold:#e0c05a; --green:#6fcf97; --blue:#7fb3e8; --purple:#b79be0;
+}
+* { box-sizing:border-box; }
+body { background:var(--court); color:var(--chalk); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; margin:0; }
+.wrap { max-width:880px; margin:0 auto; padding:0 24px 80px; }
+.mono { font-family:ui-monospace,"SF Mono",Menlo,monospace; font-variant-numeric:tabular-nums; }
+.eyebrow { font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:.24em; color:var(--line); text-transform:uppercase; }
+
+/* hero */
+.hero { padding:72px 0 44px; border-bottom:2px solid var(--line); position:relative; }
+.hero::after { content:""; position:absolute; left:0; right:0; bottom:6px; height:1px; background:var(--line); opacity:.5; }
+h1 { font-size:clamp(34px,6vw,56px); line-height:1.06; font-weight:800; letter-spacing:-.02em; margin:14px 0 10px; text-wrap:balance; }
+.hero p.lede { color:var(--muted); max-width:56ch; margin:0 0 34px; }
+.scoreline { display:flex; gap:44px; flex-wrap:wrap; align-items:flex-end; }
+.score .big { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:clamp(44px,8vw,72px); font-weight:700; line-height:1; color:var(--line); }
+.score .lbl { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+.stamp { color:var(--muted); font-size:13px; margin-top:22px; }
+
+/* sections */
+h2 { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--line); font-family:ui-monospace,Menlo,monospace; margin:56px 0 6px; }
+.sub { color:var(--muted); margin:0 0 22px; max-width:60ch; }
+
+/* ladder */
+.ladder { display:flex; flex-direction:column; border-top:1px solid var(--rule); }
+.lr { display:grid; grid-template-columns:14px 76px 92px 1fr auto; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid var(--rule); }
+.lr-chip { width:14px; height:14px; border-radius:3px; }
+.c-black{background:var(--black);} .c-brown{background:var(--brown);} .c-gold{background:var(--gold);}
+.c-green{background:var(--green);} .c-blue{background:var(--blue);} .c-purple{background:var(--purple);}
+.lr-name { font-weight:700; }
+.lr-band { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; color:var(--line); font-size:14px; }
+.lr-desc { color:var(--muted); font-size:14px; }
+.lr-today { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:13px; background:var(--surface2); padding:3px 9px; border-radius:99px; white-space:nowrap; }
+.lr-today.dim { opacity:.45; }
+@media (max-width:640px) { .lr { grid-template-columns:14px 70px 1fr auto; } .lr-desc { display:none; } }
+
+/* week strip */
+.week { display:flex; gap:26px; align-items:flex-end; padding:18px 0 6px; }
+.day { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.bar { width:40px; background:var(--surface2); border-radius:4px 4px 0 0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+.fill { background:var(--line); opacity:.85; }
+.day.live .fill { opacity:1; }
+.day.live .bar { outline:1px solid var(--line); }
+.day-pct { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:14px; font-weight:700; }
+.day-name { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.day-n { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:var(--muted); }
+
+/* facts + steps */
+.facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.fact { background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:16px 18px; }
+.fact .n { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:26px; font-weight:700; color:var(--line); }
+.fact .t { font-size:13px; color:var(--muted); margin-top:2px; }
+.steps { counter-reset:s; display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule); }
+.step { display:grid; grid-template-columns:52px 1fr; gap:10px; padding:16px 0; border-bottom:1px solid var(--rule); }
+.step::before { counter-increment:s; content:counter(s,decimal-leading-zero); font-family:ui-monospace,Menlo,monospace; color:var(--line); font-size:20px; }
+.step b { display:block; margin-bottom:2px; }
+.step span { color:var(--muted); font-size:15px; }
+
+
+/* picks */
+.pk-head { display:flex; gap:10px; align-items:center; margin:26px 0 4px; }
+.pk-head b { font-size:15px; }
+.pk-mean { color:var(--muted); font-size:13px; }
+.pk-count { margin-left:auto; font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:12px; color:var(--muted); }
+.pk { display:grid; grid-template-columns:56px 1fr 58px 74px; gap:12px; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--rule); }
+.pk-time { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-size:13px; color:var(--muted); }
+.pk-match { font-size:15px; min-width:0; }
+.pk-match i { color:var(--muted); font-style:normal; font-size:13px; }
+.pk-ev { display:block; color:var(--muted); font-size:12px; }
+.pk-p { font-family:ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; font-weight:700; font-size:17px; text-align:right; color:var(--line); }
+.st { font-family:ui-monospace,Menlo,monospace; font-size:12px; text-align:right; white-space:nowrap; }
+.st.win { color:var(--green); } .st.miss { color:#e08585; }
+.st.live { color:var(--gold); animation:pulse 2s infinite; } .st.up { color:var(--muted); opacity:.5; }
+@keyframes pulse { 50% { opacity:.45; } }
+@media (prefers-reduced-motion: reduce) { .st.live { animation:none; } }
+@media (max-width:560px) { .pk { grid-template-columns:44px 1fr 48px 56px; gap:8px; } .pk-match { font-size:14px; } }
+
+@media (max-width:600px) { .wrap { padding:0 16px 60px; } .hero { padding:44px 0 32px; } .scoreline { gap:24px; } .week { gap:14px; overflow-x:auto; } .bar { width:30px; } }
+footer { margin-top:64px; padding-top:18px; border-top:1px solid var(--rule); color:var(--muted); font-size:13px; max-width:70ch; }
+</style>
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Tennis Predictive Engine</span>
+    <h1>Every professional tennis match, priced before it's played.</h1>
+    <p class="lede">TPE is a research system that predicts men's and women's professional tennis — ATP, Challenger, ITF, WTA and women's ITF, qualifying included — and grades every one of its own picks with a measured trust color before the first serve.</p>
+    <div class="scoreline">
+      <div class="score"><div class="big">0%</div><div class="lbl">selective picks today · 0/1</div></div>
+      <div class="score"><div class="big">0–1</div><div class="lbl">all picks today (0%)</div></div>
+      <div class="score"><div class="big">73%</div><div class="lbl">this week · 360/491 picks</div></div>
+    </div>
+    <div class="stamp">Monday, August 17, 2026 · live tape as of 6:16am et, aug 17 · refreshed every 30 minutes</div>
+  </div>
+
+
+  <h2>Today’s picks</h2>
+  <p class="sub">Every prediction on today’s board — 89 matches across all tours, grouped by trust color, time-ordered. The percentage is the model’s pre-match win probability for the named pick; results fill in live.</p>
+<div class="pk-head"><span class="lr-chip c-brown"></span><b>Brown</b><span class="pk-mean">80–90% historically</span><span class="pk-count">23 matches</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Andrea Lazaro Garcia</b> <i>over</i> Denisa Zoldakova<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">93%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Lucie Havlickova</b> <i>over</i> Victoria Bervid<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">91%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Gina Feistel</b> <i>over</i> Oriana Gniewkowska<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">88%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Radka Zelnickova</b> <i>over</i> Barbara Straszewska<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">80%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:50a</span><span class="pk-match"><b>Radu Mihai Papoe</b> <i>over</i> Matyas Cerny<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">77%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">6:00a</span><span class="pk-match"><b>Peter Makk</b> <i>over</i> Marcus Walters<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">87%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">6:00a</span><span class="pk-match"><b>John Echeverria</b> <i>over</i> Billy Blaydes<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">68%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">6:10a</span><span class="pk-match"><b>N. Fatic</b> <i>over</i> Matthew William Donald<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">58%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:30a</span><span class="pk-match"><b>Alena Kovackova</b> <i>over</i> Eva Marie Voracek<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">70%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:30a</span><span class="pk-match"><b>Alec Deckers</b> <i>over</i> Ali Habib<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">80%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:40a</span><span class="pk-match"><b>Vitaliy Sachko</b> <i>over</i> Daniel Siniakov<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">84%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:00a</span><span class="pk-match"><b>Anton Shepp</b> <i>over</i> Mark Ceban<span class="pk-ev">Roehampton (United Kingdom)</span></span><span class="pk-p">83%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:00a</span><span class="pk-match"><b>Christian Langmo</b> <i>over</i> Gabi Adrian Boitan<span class="pk-ev">Roehampton (United Kingdom)</span></span><span class="pk-p">54%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Marta Kostyuk</b> <i>over</i> Sloane Stephens<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">87%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Aryna Sabalenka</b> <i>over</i> Xiyu Wang<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">86%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Elena Malygina</b> <i>over</i> Zuzanna Bednarz<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">83%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Mirra Andreeva</b> <i>over</i> Janice Tjen<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">80%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Iga Swiatek</b> <i>over</i> Maria Sakkari<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">86%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Elena Rybakina</b> <i>over</i> Magdalena Frech<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">81%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Linda Noskova</b> <i>over</i> Clara Tauson<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">70%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">3:00p</span><span class="pk-match"><b>Jessica Pegula</b> <i>over</i> Emma Navarro<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">78%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:30p</span><span class="pk-match"><b>Laslo Djere</b> <i>over</i> Samuel Heredia<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">94%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:00p</span><span class="pk-match"><b>Alexander Zverev</b> <i>over</i> Terence Atmane<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">80%</span><span class="st up">—</span></div>
+<div class="pk-head"><span class="lr-chip c-gold"></span><b>Gold</b><span class="pk-mean">76–80% historically</span><span class="pk-count">3 matches</span></div>
+<div class="pk"><span class="pk-time">7:30a</span><span class="pk-match"><b>Patrick Brady</b> <i>over</i> Olukayode Alafia Damina Ayeni<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Lautaro Midon</b> <i>over</i> Dan Martin<span class="pk-ev">Kingston (Jamaica)</span></span><span class="pk-p">92%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:00p</span><span class="pk-match"><b>Max Purcell</b> <i>over</i> Blaise Bicknell<span class="pk-ev">Kingston (Jamaica)</span></span><span class="pk-p">68%</span><span class="st up">—</span></div>
+<div class="pk-head"><span class="lr-chip c-green"></span><b>Green</b><span class="pk-mean">72–76% historically</span><span class="pk-count">5 matches</span></div>
+<div class="pk"><span class="pk-time">7:00a</span><span class="pk-match"><b>Anna Kmiecik</b> <i>over</i> Gina Marie Dittmann<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">50%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">8:30a</span><span class="pk-match"><b>Yasmine Mansouri</b> <i>over</i> Marcelina Podlinska<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">50%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:10a</span><span class="pk-match"><b>Kimmer Coppejans</b> <i>over</i> Miguel Damas<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">71%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Alex De Minaur</b> <i>over</i> Arthur Fery<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">75%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:30p</span><span class="pk-match"><b>Alan Magadan</b> <i>over</i> David Jorda Sanchis<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">54%</span><span class="st up">—</span></div>
+<div class="pk-head"><span class="lr-chip c-blue"></span><b>Blue</b><span class="pk-mean">62–72% historically</span><span class="pk-count">29 matches</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Yelyzaveta Kotliar</b> <i>over</i> Laura Mair<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">81%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Sandra Samir</b> <i>over</i> Polina Leykina<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">57%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:00a</span><span class="pk-match"><b>Raluka Serban</b> <i>over</i> Anastasia Zolotareva<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">57%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">4:05a</span><span class="pk-match"><b>Alex Marti Pujolras</b> <i>over</i> Lorenzo Bocchi<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">63%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">4:10a</span><span class="pk-match"><b>Luca Wiedenmann</b> <i>over</i> Thiago Cigarran<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">70%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">4:10a</span><span class="pk-match"><b>Gerard Campana Lee</b> <i>over</i> Theo Papamalamis<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">57%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">5:30a</span><span class="pk-match"><b>Benjamin Hassan</b> <i>over</i> Leo Raquillet<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">77%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:30a</span><span class="pk-match"><b>Norbert Gombos</b> <i>over</i> Andrew Paulson<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">72%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">7:00a</span><span class="pk-match"><b>Sapfo Sakellaridi</b> <i>over</i> Gaia Maduzzi<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">52%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:30a</span><span class="pk-match"><b>Radu Albot</b> <i>over</i> Leonardo Rossi<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">71%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:40a</span><span class="pk-match"><b>Sumit Nagal</b> <i>over</i> Eduardo Ribeiro<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">80%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">8:00a</span><span class="pk-match"><b>Ane Mintegi Del Olmo</b> <i>over</i> Anastasia Tikhonova<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">82%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">8:00a</span><span class="pk-match"><b>Barbora Palicova</b> <i>over</i> Beatrise Zeltina<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">79%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">8:30a</span><span class="pk-match"><b>Francesca Pace</b> <i>over</i> Viola Turini<span class="pk-ev">W35 Krakow (Poland), Clay</span></span><span class="pk-p">57%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">8:30a</span><span class="pk-match"><b>Ognjen Milic</b> <i>over</i> Lucio Ratti<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:00a</span><span class="pk-match"><b>Johannus Monday</b> <i>over</i> Iliyan Radulov<span class="pk-ev">Roehampton (United Kingdom)</span></span><span class="pk-p">78%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:10a</span><span class="pk-match"><b>Cezar Cretu</b> <i>over</i> Thomas Faurel<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Madison Keys</b> <i>over</i> Katerina Siniakova<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">71%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Iva Jovic</b> <i>over</i> Marie Bouzkova<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">61%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:30a</span><span class="pk-match"><b>Alastair Gray</b> <i>over</i> Emile Hudd<span class="pk-ev">Roehampton (United Kingdom)</span></span><span class="pk-p">79%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:30a</span><span class="pk-match"><b>Max Basing</b> <i>over</i> Lucas Poullain<span class="pk-ev">Roehampton (United Kingdom)</span></span><span class="pk-p">66%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Juan Bautista Torres</b> <i>over</i> Marek Gengel<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">81%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Lucas Andrade Da Silva</b> <i>over</i> Ivan Marrero Curbelo<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">61%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Evan Zhu</b> <i>over</i> Andrew Fenty<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Diana Shnaider</b> <i>over</i> Maja Chwalinska<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">72%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Rafael Jodar</b> <i>over</i> Alejandro Tabilo<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">78%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Jakub Mensik</b> <i>over</i> Rinky Hijikata<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">77%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:00p</span><span class="pk-match"><b>Gauthier Onclin</b> <i>over</i> James Mccabe<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">56%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:30p</span><span class="pk-match"><b>Alejandro Moro Canas</b> <i>over</i> Felix Balshaw<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">54%</span><span class="st up">—</span></div>
+<div class="pk-head"><span class="lr-chip c-purple"></span><b>Purple</b><span class="pk-mean">under 62% — low trust</span><span class="pk-count">27 matches · 0/1 so far</span></div>
+<div class="pk"><span class="pk-time">4:40a</span><span class="pk-match"><b>Jakub Paul</b> <i>over</i> Rudolf Molleker<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">70%</span><span class="st miss">✗ MISS</span></div>
+<div class="pk"><span class="pk-time">4:50a</span><span class="pk-match"><b>Javier Barranco Cosano</b> <i>over</i> Andres Martin<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">52%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">5:30a</span><span class="pk-match"><b>Kai Wehnelt</b> <i>over</i> Nino Ehrenschneider<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">58%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:00a</span><span class="pk-match"><b>Nicolas Tepmahc</b> <i>over</i> Filip Peliwo<span class="pk-ev">Roehampton (United Kingdom) - Qualification</span></span><span class="pk-p">56%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">6:00a</span><span class="pk-match"><b>Oleksandr Ovcharenko</b> <i>over</i> Dimitris Sakellaridis<span class="pk-ev">Sion (Switzerland) - Qualification</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:10a</span><span class="pk-match"><b>Oleksii Krutykh</b> <i>over</i> Luciano Emanuel Ambrogi<span class="pk-ev">Prague (Czech Republic) - Qualification</span></span><span class="pk-p">58%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">6:30a</span><span class="pk-match"><b>Alicia Herrero Linana</b> <i>over</i> Isabella Shinikova<span class="pk-ev">W50 Prague (Czech Republic), Clay</span></span><span class="pk-p">58%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:00a</span><span class="pk-match"><b>Ryan Nijboer</b> <i>over</i> Murkel Alejandro Dellien Velasco<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">65%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:00a</span><span class="pk-match"><b>Calvin Hemery</b> <i>over</i> Petr Nesterov<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">61%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">9:00a</span><span class="pk-match"><b>Juan Manuel La Serna</b> <i>over</i> Facundo Mena<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">59%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">10:00a</span><span class="pk-match"><b>Ekaterina Alexandrova</b> <i>over</i> Sara Bejlek<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">60%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Henry Bernet</b> <i>over</i> Johan Nikles<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">77%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Diane Parry</b> <i>over</i> Lois Boisson<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">67%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Flavio Cobolli</b> <i>over</i> Alexander Blockx<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">56%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Edward Winter</b> <i>over</i> Aidan Kim<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">54%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">11:00a</span><span class="pk-match"><b>Martin Landaluce</b> <i>over</i> Thiago Agustin Tirante<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">50%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Timo Legout</b> <i>over</i> Garrett Johns<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">66%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Miguel Tobon</b> <i>over</i> Paulo Andre Saraiva Dos Santos<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">62%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Anna Kalinskaya</b> <i>over</i> Sorana Cirstea<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">56%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">12:30p</span><span class="pk-match"><b>Kenta Miyoshi</b> <i>over</i> Roger Pascual Ferra<span class="pk-ev">Kingston (Jamaica) - Qualification</span></span><span class="pk-p">56%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Elias Ymer</b> <i>over</i> Paul Jubb<span class="pk-ev">Kingston (Jamaica)</span></span><span class="pk-p">77%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">2:00p</span><span class="pk-match"><b>Harold Mayot</b> <i>over</i> Gustavo Heide<span class="pk-ev">Kingston (Jamaica)</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">3:30p</span><span class="pk-match"><b>Arthur Fils</b> <i>over</i> Jiri Lehecka<span class="pk-ev">Cincinnati (Usa)</span></span><span class="pk-p">54%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">3:30p</span><span class="pk-match"><b>Igor Marcondes</b> <i>over</i> Alvaro Guillen Meza<span class="pk-ev">Kingston (Jamaica)</span></span><span class="pk-p">52%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:00p</span><span class="pk-match"><b>Luka Pavlovic</b> <i>over</i> Felipe Meligeni Alves<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">63%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">5:00p</span><span class="pk-match"><b>Moez Echargui</b> <i>over</i> Hugo Grenier<span class="pk-ev">Cancun 2 (Mexico) - Qualification</span></span><span class="pk-p">61%</span><span class="st live">● LIVE</span></div>
+<div class="pk"><span class="pk-time">8:30p</span><span class="pk-match"><b>Alexandra Eala</b> <i>over</i> Amanda Anisimova<span class="pk-ev">Cincinnati (Usa), Hard</span></span><span class="pk-p">51%</span><span class="st up">—</span></div>
+<div class="pk-head"><span class="lr-chip c-none"></span><b>Ungraded</b><span class="pk-mean">no measured band</span><span class="pk-count">2 matches</span></div>
+<div class="pk"><span class="pk-time">7:30a</span><span class="pk-match"><b>Max Dahlin</b> <i>over</i> Tommaso Compagnucci<span class="pk-ev">Sion (Switzerland)</span></span><span class="pk-p">55%</span><span class="st up">—</span></div>
+<div class="pk"><span class="pk-time">7:40a</span><span class="pk-match"><b>Nick Hardt</b> <i>over</i> Jakub Filip<span class="pk-ev">Prague (Czech Republic)</span></span><span class="pk-p">79%</span><span class="st up">—</span></div>
+
+
+  <h2>The trust ladder</h2>
+  <p class="sub">Every prediction is assigned a color from its evidence shape — how the models, the rankings and the ratings line up. Each color is a promise measured on tens of thousands of past matches, not a feeling.</p>
+  <div class="ladder">
+<div class="lr">
+      <span class="lr-chip c-black"></span>
+      <span class="lr-name">Black</span>
+      <span class="lr-band">90%+</span>
+      <span class="lr-desc">Structural mismatches with full agreement — the closest thing to a sure call this sport allows.</span>
+      <span class="lr-today dim">— today</span>
+    </div>
+<div class="lr">
+      <span class="lr-chip c-brown"></span>
+      <span class="lr-name">Brown</span>
+      <span class="lr-band">80–90%</span>
+      <span class="lr-desc">Strong evidence, all instruments aligned. The workhorse band.</span>
+      <span class="lr-today dim">— today</span>
+    </div>
+<div class="lr">
+      <span class="lr-chip c-gold"></span>
+      <span class="lr-name">Gold</span>
+      <span class="lr-band">76–80%</span>
+      <span class="lr-desc">Clear favorite with one soft spot in the evidence.</span>
+      <span class="lr-today dim">— today</span>
+    </div>
+<div class="lr">
+      <span class="lr-chip c-green"></span>
+      <span class="lr-name">Green</span>
+      <span class="lr-band">72–76%</span>
+      <span class="lr-desc">Solid pick; genuine resistance possible.</span>
+      <span class="lr-today dim">— today</span>
+    </div>
+<div class="lr">
+      <span class="lr-chip c-blue"></span>
+      <span class="lr-name">Blue</span>
+      <span class="lr-band">62–72%</span>
+      <span class="lr-desc">Competitive match with a measurable lean.</span>
+      <span class="lr-today dim">— today</span>
+    </div>
+<div class="lr">
+      <span class="lr-chip c-purple"></span>
+      <span class="lr-name">Purple</span>
+      <span class="lr-band">under 62%</span>
+      <span class="lr-desc">Coin-flip territory — shown for coverage, flagged as low trust.</span>
+      <span class="lr-today">0/1 today</span>
+    </div>
+  </div>
+
+  <h2>This week</h2>
+  <p class="sub">Daily record across all tours. Bar height is volume, fill is wins. Selective picks (confidence ≥60%) ran 75% on the week.</p>
+  <div class="week">
+<div class="day"><div class="bar" style="height:96px"><div class="fill" style="height:73px"></div></div><span class="day-pct">77%</span><span class="day-name">Tue</span><span class="day-n">75/98</span></div>
+<div class="day"><div class="bar" style="height:120px"><div class="fill" style="height:81px"></div></div><span class="day-pct">68%</span><span class="day-name">Wed</span><span class="day-n">83/122</span></div>
+<div class="day"><div class="bar" style="height:89px"><div class="fill" style="height:65px"></div></div><span class="day-pct">74%</span><span class="day-name">Thu</span><span class="day-n">67/91</span></div>
+<div class="day"><div class="bar" style="height:53px"><div class="fill" style="height:38px"></div></div><span class="day-pct">72%</span><span class="day-name">Fri</span><span class="day-n">39/54</span></div>
+<div class="day"><div class="bar" style="height:27px"><div class="fill" style="height:16px"></div></div><span class="day-pct">61%</span><span class="day-name">Sat</span><span class="day-n">17/28</span></div>
+<div class="day"><div class="bar" style="height:53px"><div class="fill" style="height:47px"></div></div><span class="day-pct">89%</span><span class="day-name">Sun</span><span class="day-n">48/54</span></div>
+<div class="day live"><div class="bar" style="height:18px"><div class="fill" style="height:0px"></div></div><span class="day-pct">0%</span><span class="day-name">Today</span><span class="day-n">0/1 · live</span></div>
+  </div>
+
+  <h2>The engine</h2>
+  <div class="facts">
+    <div class="fact"><div class="n">1.5M+</div><div class="t">matches in the database, 1968–today, updated daily</div></div>
+    <div class="fact"><div class="n">5</div><div class="t">tours covered — ATP, Challenger, ITF, WTA, W-ITF — plus qualifying</div></div>
+    <div class="fact"><div class="n">2</div><div class="t">independent models per match: a gradient-boosted engine and a transparent 68-factor scorecard</div></div>
+    <div class="fact"><div class="n">100–180</div><div class="t">predictions published per day, every match graded</div></div>
+  </div>
+
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step"><div><b>Measure the players.</b><span>Ratings, form, surface history, opponent quality, fatigue and 60+ other factors — computed strictly from what was knowable before the match. No hindsight, ever.</span></div></div>
+    <div class="step"><div><b>Predict twice, independently.</b><span>A machine-learned engine and a human-readable scorecard each pick a winner. When they agree with the rankings, confidence is highest; when they split, the page says so.</span></div></div>
+    <div class="step"><div><b>Grade the pick, then keep score in public.</b><span>The trust color states the historically measured win rate for picks with that exact evidence shape — and every day's results are tallied against it, live on this page.</span></div></div>
+  </div>
+
+  <footer>TPE is a private research project. All figures are model estimates measured against historical and live results; they are not betting advice, and no wagering service is offered. Trust-band percentages are walk-forward measurements on 2024-present data and are re-verified weekly.</footer>
+</div>
+<script>
+(function(){
+  var BUILT = 1786961779;
+  function chk(){
+    var age = (Date.now()/1000 - BUILT) / 60;
+    var el = document.getElementById("stalewarn");
+    if (age > 45) {
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "stalewarn";
+        el.style.cssText = "position:fixed;bottom:0;left:0;right:0;z-index:99;background:#a03030;color:#fff;font:13px/1.4 system-ui;padding:9px 16px;text-align:center";
+        document.body.appendChild(el);
+      }
+      el.textContent = "This copy is " + Math.round(age) + " minutes old — reload the page for the live version.";
+    } else if (el) { el.remove(); }
+  }
+  chk(); setInterval(chk, 60000);
+})();
+</script>
+<script>(function(){var BUILT=1786961779; var SELF="index.html";function age(){return (Date.now()/1000-BUILT)/60;}function tryReload(){if(age()<35||document.visibilityState!=="visible")return;var last=0;try{last=+(localStorage.getItem("tpe_ar_last")||0);}catch(e){}if(Date.now()-last<600000)return;try{localStorage.setItem("tpe_ar_last",String(Date.now()));}catch(e){}var a=document.createElement("a");a.href=SELF;a.style.display="none";document.body.appendChild(a);a.click();a.remove();}setInterval(tryReload,60000);document.addEventListener("visibilitychange",tryReload);})();</script>
