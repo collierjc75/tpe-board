@@ -677,6 +677,7 @@ function render(){
     gh.style.setProperty("--tc", tc(t));
     gh.innerHTML = `<span class="mdot" style="background:${tc(t)}"></span>` +
       `<b>${TRUST[t][0]}</b>` +
+      (RANGE[t] ? `<span>wins ${RANGE[t]} historically</span>` : "") +
       `<span class="gr mono">${grp.length}` +
       (w + l ? ` · ${w}–${l} today` : "") + `</span>`;
     grid.appendChild(gh);
@@ -724,7 +725,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787152488;
+  var BUILT = 1787152641;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -743,7 +744,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787152488; var SELF="app.html";
+  var BUILT=1787152641; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -763,7 +764,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787152488;
+  var BUILT = 1787152641;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
