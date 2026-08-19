@@ -805,7 +805,9 @@ function renderBest(){
     first = false;
     d.style.setProperty("--tc", tc(r.trust));
     d.innerHTML = `<div class="bn">${r.fav}</div>` +
-      `<div class="bo">vs ${r.opp}</div>` +
+      `<div class="bo">vs ${r.opp}` +
+      (r.time && r.time !== "—"
+        ? ` \u00b7 <span class="mono">${r.time}</span>` : "") + `</div>` +
       `<div class="bp mono">${r.p}%` +
       (r.state === "win" ? ' <span class="bres" style="color:var(--win)">✓</span>'
        : r.state === "miss" ? ' <span class="bres" style="color:var(--miss)">✗</span>'
@@ -821,7 +823,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787159982;
+  var BUILT = 1787160304;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -840,7 +842,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787159982; var SELF="app.html";
+  var BUILT=1787160304; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -860,7 +862,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787159982;
+  var BUILT = 1787160304;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
