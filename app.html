@@ -74,7 +74,8 @@ header{background:var(--surface2);border-bottom:1px solid var(--line);
 /* ---- sticky filter strip ---- */
 .strip{position:sticky;top:0;z-index:20;background:var(--navbg);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);padding:8px 0 7px}
+  border-bottom:1px solid var(--line);padding:8px 0 7px;
+  display:flex;flex-direction:column;gap:6px}
 .striprow{display:flex;gap:7px;align-items:center;overflow-x:auto;
   padding:0 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .striprow::-webkit-scrollbar{display:none}
@@ -269,7 +270,11 @@ nav.bottom button:focus-visible{outline:2px solid var(--acc);
 </header>
 
 <div id="view-today">
-  <div class="strip"><div class="striprow" id="strip"></div></div>
+  <div class="strip">
+    <div class="striprow" id="strip-status"></div>
+    <div class="striprow" id="strip-tour"></div>
+    <div class="striprow" id="strip-trust"></div>
+  </div>
   <div class="tools">
     <input id="q" type="search" placeholder="Search player or event">
     <label class="floor">min <input type="range" id="floor" min="50" max="90"
@@ -337,8 +342,7 @@ const tc = t => getComputedStyle(document.documentElement)
                  .getPropertyValue("--t-"+t).trim();
 
 function strip(){
-  const el = $("strip"); el.innerHTML = "";
-  const mk = (cls, htmlc, pressed, on) => {
+  const mk = (el, cls, htmlc, pressed, on) => {
     const b = document.createElement("button");
     b.className = cls; b.innerHTML = htmlc;
     b.setAttribute("aria-pressed", String(pressed));
@@ -346,21 +350,21 @@ function strip(){
     el.appendChild(b);
     return b;
   };
+  const s1 = $("strip-status"); s1.innerHTML = "";
   for (const [val, lab] of STATES)
-    mk("pill", lab, state.st === val, () => state.st = val);
-  el.appendChild(Object.assign(document.createElement("span"),
-    {className:"sep"}));
-  mk("pill", "All tours", state.tour === "All", () => state.tour = "All");
+    mk(s1, "pill", lab, state.st === val, () => state.st = val);
+  const s2 = $("strip-tour"); s2.innerHTML = "";
+  mk(s2, "pill", "All tours", state.tour === "All",
+     () => state.tour = "All");
   for (const t of TOURS){
     if (!DATA.some(r => r.tour === t)) continue;
-    mk("pill", t, state.tour === t,
+    mk(s2, "pill", t, state.tour === t,
        () => state.tour = state.tour === t ? "All" : t);
   }
-  el.appendChild(Object.assign(document.createElement("span"),
-    {className:"sep"}));
+  const s3 = $("strip-trust"); s3.innerHTML = "";
   for (const t of ORDER){
     if (!DATA.some(r => r.trust === t)) continue;
-    const b = mk("tpill",
+    const b = mk(s3, "tpill",
       `<span class="mdot" style="background:${tc(t)}"></span>${TRUST[t][0]}`,
       state.trust.has(t),
       () => state.trust.has(t) ? state.trust.delete(t) : state.trust.add(t));
@@ -715,7 +719,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787151869;
+  var BUILT = 1787151915;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -734,7 +738,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787151869; var SELF="app.html";
+  var BUILT=1787151915; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -754,7 +758,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787151869;
+  var BUILT = 1787151915;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
