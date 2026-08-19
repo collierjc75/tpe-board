@@ -331,6 +331,9 @@ const WEEK = [{"date": "2026-08-13", "card": [118, 163], "selective": [97, 123],
 const TAGMEAN = {"PPC": "Profile confidence — one side's measured strength rests on far less observed history than the other's. If this misses, the likely reason is an unknown opponent, not an overrated favorite.", "FORM-OPPOSED": "The favorite's recent form points the other way. This cohort historically wins ~7 points less than stated.", "EXP-DEFICIT": "The favorite lacks exposure to ranked competition. Cohort runs ~1.7 points under stated.", "e-OPPOSED": "The baseline-error estimate leans toward the opponent. ITF cohort runs ~1.5 points under stated.", "SPIKE-OPP": "The opponent hits ceiling performances unusually often. Cohort runs ~1.7 points under stated.", "MARKET": "Market-rule cohort — historically earns its stated band.", "PINNACLE": "Model and bookmaker comparison for this row.", "UPSET-RISK": "The opponent has beaten much higher-rated players before.", "CHRONIC-UPSETTER": "The opponent upsets at a persistently high career rate."};
 const TRUST = {"black": ["Black", "Picks with this evidence shape win 90%+ of the time."], "brown": ["Brown", "Picks with this evidence shape win 80–90% of the time."], "gold": ["Gold", "Picks with this evidence shape win 76–80% of the time."], "green": ["Green", "Picks with this evidence shape win 72–76% of the time."], "blue": ["Blue", "Picks with this evidence shape win 62–72% of the time."], "purple": ["Purple", "Below 62% historically — closer to a coin flip."], "none": ["Unrated", "No trust rating for this row — read the % alone."]};
 const FUTURES = {"date": "2026-08-19", "built": 1787148963, "events": [{"tour": "ATP", "event": "Atp - Singles: Cincinnati (Usa), Hard", "date": "2026-08-19", "rounds_remaining": 4, "players": [{"name": "T. Fritz", "p_title": 0.1917}, {"name": "A. Fils", "p_title": 0.1568}, {"name": "L. Musetti", "p_title": 0.1104}, {"name": "A. De Minaur", "p_title": 0.1103}, {"name": "F. Auger-Aliassime", "p_title": 0.1023}, {"name": "R. Jodar", "p_title": 0.0996}, {"name": "J. Mensik", "p_title": 0.0768}, {"name": "B. Nakashima", "p_title": 0.0472}, {"name": "T. Paul", "p_title": 0.0379}, {"name": "F. Tiafoe", "p_title": 0.0368}, {"name": "N. Borges", "p_title": 0.0144}, {"name": "T. A. Tirante", "p_title": 0.0108}, {"name": "J. Faria", "p_title": 0.0048}], "meta": "current round uses model probabilities where scored; future rounds elo_v2; bracket adjacency assumed from schedule listed order; finished matches locked"}, {"tour": "WTA", "event": "Wta - Singles: Cincinnati (Usa), Hard", "date": "2026-08-19", "rounds_remaining": 4, "players": [{"name": "I. Swiatek", "p_title": 0.2435}, {"name": "A. Sabalenka", "p_title": 0.2429}, {"name": "E. Rybakina", "p_title": 0.1366}, {"name": "C. Gauff", "p_title": 0.1261}, {"name": "J. Pegula", "p_title": 0.0869}, {"name": "M. Kostyuk", "p_title": 0.0407}, {"name": "M. Keys", "p_title": 0.0378}, {"name": "L. Noskova", "p_title": 0.026}, {"name": "A. Anisimova", "p_title": 0.0236}, {"name": "D. Shnaider", "p_title": 0.0157}, {"name": "S. Cirstea", "p_title": 0.0098}, {"name": "M. Bouzkova", "p_title": 0.005}, {"name": "S. Bejlek", "p_title": 0.0034}, {"name": "D. Parry", "p_title": 0.0007}, {"name": "Xiy. Wang", "p_title": 0.0006}], "meta": "current round uses model probabilities where scored; future rounds elo_v2; bracket adjacency assumed from schedule listed order; finished matches locked"}]};
+const RANGE = {black:"90%+", brown:"80\u201390%", gold:"76\u201380%",
+               green:"72\u201376%", blue:"62\u201372%", purple:"<62%",
+               none:""};
 const ORDER = ["black","brown","gold","green","blue","purple","none"];
 const TOURS = ["ATP","CH","ITF","WTA","W-ITF"];
 const STATES = [["all","All"],["live","Live"],["upcoming","Upcoming"],
@@ -365,7 +368,9 @@ function strip(){
   for (const t of ORDER){
     if (!DATA.some(r => r.trust === t)) continue;
     const b = mk(s3, "tpill",
-      `<span class="mdot" style="background:${tc(t)}"></span>${TRUST[t][0]}`,
+      `<span class="mdot" style="background:${tc(t)}"></span>${TRUST[t][0]}` +
+      (RANGE[t] ? ` <span style="color:var(--mut);font-size:11px">` +
+                  `${RANGE[t]}</span>` : ""),
       state.trust.has(t),
       () => state.trust.has(t) ? state.trust.delete(t) : state.trust.add(t));
     b.style.setProperty("--tc", tc(t));
@@ -719,7 +724,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787152421;
+  var BUILT = 1787152488;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -738,7 +743,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787152421; var SELF="app.html";
+  var BUILT=1787152488; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -758,7 +763,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787152421;
+  var BUILT = 1787152488;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
