@@ -280,7 +280,9 @@ nav.bottom button:focus-visible{outline:2px solid var(--acc);
     <div class="striprow" id="strip-trust"></div>
   </div>
   <div class="tools">
-    <input id="q" type="search" placeholder="Search player or event">
+    <input id="q" type="search" placeholder="Search player or event"
+      spellcheck="false" autocorrect="off" autocapitalize="off"
+      autocomplete="off">
     <select id="evsel" style="max-width:132px;border:1px solid var(--line);
       background:var(--surface);color:var(--ink);border-radius:10px;
       padding:8px 6px;font-size:12px"></select>
@@ -900,7 +902,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787247705;
+  var BUILT = 1787247724;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -919,7 +921,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787247705; var SELF="app.html";
+  var BUILT=1787247724; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -939,7 +941,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787247705;
+  var BUILT = 1787247724;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
