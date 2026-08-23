@@ -1,0 +1,16 @@
+{
+  "name": "TPE — Tennis Predictive Engine",
+  "short_name": "TPE",
+  "description": "Every professional tennis match, priced before it's played. Predictions with measured trust colors across ATP, Challenger, ITF, WTA and W-ITF.",
+  "start_url": "/tpe-board/app.html",
+  "scope": "/tpe-board/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a130e",
+  "theme_color": "#0a130e",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

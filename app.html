@@ -6,6 +6,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef1ea">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d120d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>
+/* PWA v1 (2026-08-22): service worker registered only on the Pages origin —
+   the artifact copy has no SW/manifest files and the claude.ai origin scopes differ. */
+if ("serviceWorker" in navigator && /github\.io$/.test(location.hostname)) {
+  addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+}
+</script>
 <style>
 :root{
   --bg:#f6f7f3; --surface:#ffffff; --surface2:#eef1ea; --ink:#1a231c;
@@ -935,7 +944,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT = 1787449137;
+  var BUILT = 1787450534;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -956,7 +965,7 @@ computeFlash(); meter(); render(); renderBest();
 </script>
 <script>
 (function(){
-  var BUILT=1787449137; var SELF="app.html";
+  var BUILT=1787450534; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -976,7 +985,7 @@ computeFlash(); meter(); render(); renderBest();
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/github\.io$/.test(location.hostname)) return;
-  var BUILT = 1787449137;
+  var BUILT = 1787450534;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
