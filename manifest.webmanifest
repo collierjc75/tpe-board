@@ -1,6 +1,6 @@
 {
-  "name": "CourtVision",
-  "short_name": "CourtVision",
+  "name": "ServeVolley",
+  "short_name": "ServeVolley",
   "description": "Every professional tennis match, priced before it's played. Predictions with measured trust colors across ATP, Challenger, ITF, WTA and W-ITF.",
   "start_url": "/tpe-board/app.html",
   "scope": "/tpe-board/",
