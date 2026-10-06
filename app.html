@@ -349,7 +349,7 @@ nav.bottom button:focus-visible{outline:2px solid var(--acc);
 
 <script>
 const DATA = [];
-const WEEK = [{"date": "2026-09-29", "card": [124, 164], "selective": [106, 132], "colors": {"black": [3, 4], "brown": [47, 55], "gold": [4, 5], "green": [13, 15], "blue": [42, 54], "purple": [15, 31]}, "note": "day final (v57)"}, {"date": "2026-09-30", "card": [185, 253], "selective": [151, 193], "colors": {"black": [11, 13], "brown": [76, 88], "gold": [8, 13], "green": [14, 19], "blue": [50, 74], "purple": [26, 46]}, "note": "day final (v57)"}, {"date": "2026-10-01", "card": [140, 198], "selective": [123, 164], "colors": {"black": [9, 9], "brown": [58, 70], "gold": [9, 10], "green": [7, 11], "blue": [36, 58], "purple": [21, 40]}, "note": "day final (v57)"}, {"date": "2026-10-02", "card": [67, 103], "selective": [47, 73], "colors": {"black": [1, 2], "brown": [21, 28], "gold": [2, 4], "green": [4, 6], "blue": [17, 30], "purple": [22, 33]}, "note": "day final (v57)"}, {"date": "2026-10-03", "card": [40, 59], "selective": [27, 40], "colors": {"brown": [8, 12], "gold": [2, 2], "green": [1, 3], "blue": [15, 22], "purple": [14, 20]}, "note": "day final (v57)"}, {"date": "2026-10-04", "card": [70, 93], "selective": [59, 71], "colors": {"brown": [31, 38], "gold": [3, 3], "green": [7, 8], "blue": [20, 27], "purple": [9, 17]}, "note": "day final (v57)"}];
+const WEEK = [{"date": "2026-09-30", "card": [185, 253], "selective": [151, 193], "colors": {"black": [11, 13], "brown": [76, 88], "gold": [8, 13], "green": [14, 19], "blue": [50, 74], "purple": [26, 46]}, "note": "day final (v57)"}, {"date": "2026-10-01", "card": [140, 198], "selective": [123, 164], "colors": {"black": [9, 9], "brown": [58, 70], "gold": [9, 10], "green": [7, 11], "blue": [36, 58], "purple": [21, 40]}, "note": "day final (v57)"}, {"date": "2026-10-02", "card": [67, 103], "selective": [47, 73], "colors": {"black": [1, 2], "brown": [21, 28], "gold": [2, 4], "green": [4, 6], "blue": [17, 30], "purple": [22, 33]}, "note": "day final (v57)"}, {"date": "2026-10-03", "card": [40, 59], "selective": [27, 40], "colors": {"brown": [8, 12], "gold": [2, 2], "green": [1, 3], "blue": [15, 22], "purple": [14, 20]}, "note": "day final (v57)"}, {"date": "2026-10-04", "card": [70, 93], "selective": [59, 71], "colors": {"brown": [31, 38], "gold": [3, 3], "green": [7, 8], "blue": [20, 27], "purple": [9, 17]}, "note": "day final (v57)"}];
 const TAGMEAN = {"PPC": "Profile confidence — one side's measured strength rests on far less observed history than the other's. If this misses, the likely reason is an unknown opponent, not an overrated favorite.", "FORM-OPPOSED": "The favorite's recent form points the other way. This cohort historically wins ~7 points less than stated.", "EXP-DEFICIT": "The favorite lacks exposure to ranked competition. Cohort runs ~1.7 points under stated.", "e-OPPOSED": "The baseline-error estimate leans toward the opponent. ITF cohort runs ~1.5 points under stated.", "SPIKE-OPP": "The opponent hits ceiling performances unusually often. Cohort runs ~1.7 points under stated.", "MARKET": "Market-rule cohort — historically earns its stated band.", "PINNACLE": "Model and bookmaker comparison for this row.", "UPSET-RISK": "The opponent has beaten much higher-rated players before.", "CHRONIC-UPSETTER": "The opponent upsets at a persistently high career rate."};
 const TRUST = {"black": ["Black", "Picks with this evidence shape win 90%+ of the time."], "brown": ["Brown", "Picks with this evidence shape win 80–90% of the time."], "gold": ["Gold", "Picks with this evidence shape win 76–80% of the time."], "green": ["Green", "Picks with this evidence shape win 72–76% of the time."], "blue": ["Blue", "Picks with this evidence shape win 62–72% of the time."], "purple": ["Purple", "Below 62% historically — closer to a coin flip."], "none": ["Unrated", "No trust rating for this row — read the % alone."]};
 const FUTURES = {"date": "2026-10-05", "built": 1791181171, "events": [{"tour": "ATP", "event": "Atp - Singles: Beijing (China), Hard", "date": "2026-10-05", "rounds_remaining": 2, "players": [{"name": "N. Djokovic", "p_title": 0.464}, {"name": "D. Medvedev", "p_title": 0.2134}, {"name": "A. De Minaur", "p_title": 0.1829}, {"name": "H. Hurkacz", "p_title": 0.1397}], "meta": "current round uses model probabilities where scored; future rounds elo_v2; bracket adjacency assumed from schedule listed order; finished matches locked"}, {"tour": "WTA", "event": "Wta - Singles: Beijing (China), Hard", "date": "2026-10-05", "rounds_remaining": 4, "players": [{"name": "I. Swiatek", "p_title": 0.4443}, {"name": "C. Gauff", "p_title": 0.2508}, {"name": "A. Li", "p_title": 0.0871}, {"name": "E. Svitolina", "p_title": 0.0724}, {"name": "I. Jovic", "p_title": 0.0378}, {"name": "B. Bencic", "p_title": 0.0282}, {"name": "S. Kartal", "p_title": 0.0277}, {"name": "M. Bouzkova", "p_title": 0.0192}, {"name": "E. Mertens", "p_title": 0.0132}, {"name": "J. Ostapenko", "p_title": 0.0067}, {"name": "M. Sakkari", "p_title": 0.0048}, {"name": "Q. Zheng", "p_title": 0.003}, {"name": "A. Charaeva", "p_title": 0.0023}, {"name": "K. Rakhimova", "p_title": 0.0021}], "meta": "current round uses model probabilities where scored; future rounds elo_v2; bracket adjacency assumed from schedule listed order; finished matches locked"}]};
@@ -995,7 +995,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT = 1791258757;
+  var BUILT = 1791259219;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -1016,7 +1016,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT=1791258757; var SELF="app.html";
+  var BUILT=1791259219; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -1036,7 +1036,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/(github\.io|servevolley\.com)$/.test(location.hostname)) return;
-  var BUILT = 1791258757;
+  var BUILT = 1791259219;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
