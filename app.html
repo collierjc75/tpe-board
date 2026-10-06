@@ -587,7 +587,6 @@ function card(r, i){
     (r.state === "win" ? " win" : r.state === "miss" ? " miss" : "") +
     (r.abstain ? " abst" : "");
   d.style.setProperty("--tc", tc(r.trust));
-  d.dataset.lk = LK(r.fav, r.opp);
   const arrow = t => t === "trup" ? "▲" : t === "trdn" ? "▼" : "▬";
   const chips = [];
   if (r.abstain)
@@ -613,7 +612,7 @@ function card(r, i){
     (r.edge !== null && r.edge !== undefined && Math.abs(r.edge) >= 2
       ? `<span class="edge ${r.edge > 0 ? "pos" : "neg"} mono">` +
         `${r.edge > 0 ? "+" : ""}${Math.round(r.edge)} edge</span>` : "") +
-    (r.res ? `<span class="res ${r.state}${r.state === "live" ? " js-live" : ""}">${r.res}</span>` : "") +
+    (r.res ? `<span class="res ${r.state}">${r.res}</span>` : "") +
     `</div>` +
     (chips.length ? `<div class="chips">${chips.join("")}</div>` : "");
   const key = r.fav + "|" + r.opp;
@@ -968,34 +967,10 @@ function renderBest(){
 $("floor").oninput = e => { state.floor = +e.target.value; render(); };
 $("q").oninput = e => { state.q = e.target.value; render(); };
 computeFlash(); meter(); render(); renderBest();
-function LK(fav, opp){
-  function s(n){var p=(n||"").trim().split(/\s+/);var t=p[p.length-1]||"";return t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
-  return [s(fav), s(opp)].sort().join("|");
-}
-var __LIVE = {};
-function applyLive(){
-  var M = __LIVE || {};
-  document.querySelectorAll(".card[data-lk]").forEach(function(c){
-    var m = M[c.getAttribute("data-lk")]; if(!m) return;
-    var t2 = "● " + (m.score || "live") + (m.inplay != null ? " · in-play " + m.inplay + "%" : "");
-    var el = c.querySelector(".res.js-live");
-    if(!el){ el = document.createElement("span"); el.className = "res live js-live"; (c.querySelector(".numline") || c).appendChild(el); }
-    el.textContent = t2;
-  });
-}
-function pollLive(){
-  if(!/(github\.io|servevolley\.com)$/.test(location.hostname) || document.visibilityState !== "visible") return;
-  fetch("https://live.servevolley.com/live.json", {cache:"no-store"})
-    .then(function(r){return r.json();})
-    .then(function(d){ __LIVE = (d && d.matches) || {}; applyLive(); })
-    .catch(function(){});
-}
-(function(){ var _r = render; render = function(){ _r.apply(this, arguments); applyLive(); }; })();
-setInterval(pollLive, 20000); document.addEventListener("visibilitychange", pollLive); setTimeout(pollLive, 2000);
 </script>
 <script>
 (function(){
-  var BUILT = 1791259219;
+  var BUILT = 1791259313;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -1016,7 +991,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT=1791259219; var SELF="app.html";
+  var BUILT=1791259313; var SELF="https://claude.ai/code/artifact/2cd1f174-a8c8-4643-bd88-7c1ff42da59c";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -1036,7 +1011,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/(github\.io|servevolley\.com)$/.test(location.hostname)) return;
-  var BUILT = 1791259219;
+  var BUILT = 1791259313;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
