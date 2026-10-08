@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.servevolley.app",
+      "sha256_cert_fingerprints": [
+        "5F:49:4D:43:4B:11:C4:48:01:8D:B4:A9:EC:49:8A:5E:15:D3:72:AE:55:C5:96:27:49:63:E8:A3:6E:2B:6F:E1"
+      ]
+    }
+  }
+]
