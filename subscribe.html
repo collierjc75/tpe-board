@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ServeVolley Premium</title>
+<style>
+:root{--bg:#0d120d;--card:#16211a;--ink:#e8ece7;--mut:#93a096;--line:#243027;--acc:#5cc08c}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7f3;--card:#fff;--ink:#14231a;--mut:#5f6f63;--line:#dde3d8;--acc:#1f7a4d}}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,'Segoe UI',sans-serif;margin:0;padding:28px 18px 60px}
+.wrap{max-width:560px;margin:0 auto}h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+ul{margin:8px 0 0 18px;padding:0}li{margin:4px 0}
+input{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box;margin:8px 0}
+button{font:inherit;font-weight:600;padding:10px 16px;border:0;border-radius:8px;background:var(--acc);color:#0a130e;cursor:pointer}
+.note{color:var(--mut);font-size:12.5px;margin-top:10px}.err{color:#e08585}
+</style></head><body><div class="wrap">
+<h1>ServeVolley Premium</h1>
+<div class="sub">The predictions are free. Premium opens the evidence behind them.</div>
+<div class="card"><b>What you get</b><ul>
+<li>Why the model leans this way: the contribution of each piece of evidence, for every match</li>
+<li>Complete cautions as issued by the scorer, never shortened</li>
+<li>Live trust record for every evidence cell: sample size, realized vs stated, intervals</li>
+<li>Player stats with opponent strength, record vs higher-rated players, best wins</li>
+<li>The record, tournament projections, leaderboards and tomorrow's board</li></ul></div>
+<div class="card"><b>Subscribe</b>
+<div class="note">Monthly subscription billed by Stripe on Stripe's own checkout page. Cancel any time from the Account sheet in the app.</div>
+<input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+<button id="go" onclick="go()">Continue to Stripe checkout</button>
+<div class="note" id="msg"></div></div>
+<div class="note">Already subscribed? Open the app, tap <b>Sign in</b>, and use the same email. Research and education only; not betting advice.</div>
+</div>
+<script>
+const API="https://live.servevolley.com";
+try{const q=new URLSearchParams(location.search);if(q.get("email"))document.getElementById("email").value=q.get("email");
+ if(q.get("canceled"))document.getElementById("msg").textContent="Checkout was canceled. You can try again any time.";}catch(e){}
+async function go(){const e=(document.getElementById("email").value||"").trim().toLowerCase();const m=document.getElementById("msg");
+ if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(e)){m.textContent="Enter a valid email.";return;}
+ m.textContent="Opening checkout…";document.getElementById("go").disabled=true;
+ try{const r=await fetch(API+"/billing/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:e})});
+  const j=await r.json();if(r.ok&&j.url){location.href=j.url;return;}m.innerHTML='<span class="err">'+(j.error||"Checkout unavailable right now.")+'</span>';}
+ catch(x){m.innerHTML='<span class="err">Network error.</span>';}document.getElementById("go").disabled=false;}
+</script></body></html>
