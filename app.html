@@ -406,6 +406,7 @@ function svInit(){
   try { SV.token = localStorage.getItem("sv_token"); } catch(e){}
   svStrip();
   render();                      // the startup render ran unlocked; redraw behind the paywall now
+  try { meter(); } catch(e){}    // the header meter is drawn once at startup; redraw it from the full-day summary
   if (SV.token) svRefresh();
   if (/[?&]subscribed=1/.test(location.search)) setTimeout(svRefresh, 2000);
 }
@@ -1251,7 +1252,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT = 1792631050;
+  var BUILT = 1792631090;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -1272,7 +1273,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT=1792631050; var SELF="app.html";
+  var BUILT=1792631090; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -1292,7 +1293,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/(github\.io|servevolley\.com)$/.test(location.hostname)) return;
-  var BUILT = 1792631050;
+  var BUILT = 1792631090;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
