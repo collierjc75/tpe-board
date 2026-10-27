@@ -1256,7 +1256,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT = 1793073168;
+  var BUILT = 1793073644;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -1277,7 +1277,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT=1793073168; var SELF="app.html";
+  var BUILT=1793073644; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -1297,7 +1297,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/(github\.io|servevolley\.com)$/.test(location.hostname)) return;
-  var BUILT = 1793073168;
+  var BUILT = 1793073644;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
