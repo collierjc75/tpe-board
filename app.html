@@ -284,7 +284,7 @@ nav.bottom button:focus-visible{outline:2px solid var(--acc);
 <header>
   <div class="brand cond">ServeVolley</div>
   <div class="dayline"><span class="day">Wednesday, October 28, 2026</span>
-    <span class="updated">updated 10:24pm et</span></div>
+    <span class="updated">updated 10:33pm et</span></div>
   <div class="recline">
     <span class="bigrec mono" id="dayrec"></span>
     <span class="selrec mono" id="selrec"></span>
@@ -1382,7 +1382,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT = 1793240673;
+  var BUILT = 1793241254;
   function chk(){
     var age = (Date.now()/1000 - BUILT) / 60;
     var el = document.getElementById("stalewarn");
@@ -1403,7 +1403,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
 </script>
 <script>
 (function(){
-  var BUILT=1793240673; var SELF="app.html";
+  var BUILT=1793241254; var SELF="app.html";
   function age(){ return (Date.now()/1000 - BUILT)/60; }
   function tryReload(){
     if (age() < 35 || document.visibilityState !== "visible") return;
@@ -1423,7 +1423,7 @@ setInterval(pollLive, 20000); document.addEventListener("visibilitychange", poll
    with a cache-buster. Host-gated — artifact copies keep the anchor-nav path. */
 (function(){
   if (!/(github\.io|servevolley\.com)$/.test(location.hostname)) return;
-  var BUILT = 1793240673;
+  var BUILT = 1793241254;
   var busy = false;
   function poll(){
     if (busy || document.visibilityState !== "visible") return;
